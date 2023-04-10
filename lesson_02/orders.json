@@ -1,0 +1,11 @@
+{
+    "orders": [
+        {
+            "item": "iron",
+            "quantity": 300,
+            "price": 5.4,
+            "buyer": "Ivanov",
+            "date": "09.04.2023"
+        }
+    ]
+}

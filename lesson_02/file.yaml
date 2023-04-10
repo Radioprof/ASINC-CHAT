@@ -1,0 +1,9 @@
+first:
+- red
+- blue
+- white
+second: 253
+third:
+  glass: 26Ω
+  iron: 300Ω
+  wood: 160Ω
