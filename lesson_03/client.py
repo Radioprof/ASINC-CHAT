@@ -6,11 +6,6 @@ from tools.common import receive, send
 from tools.client_actions import presence
 
 
-def client_status(subject):
-    status = json.dumps(subject, indent=4)
-    return status
-
-
 def main():
     try:
         host = sys.argv[1]
