@@ -1,6 +1,7 @@
 from socket import *
 import sys
 
+from log.server_log_config import serv_log
 from tools.common import receive, send
 from tools.server_actions import answer_message
 
@@ -20,9 +21,11 @@ def main():
     while True:
         client, addr = s.accept()
         data = receive(client)
-        print('Сообщение: ', data, ', было отправлено клиентом: ', addr)
+        serv_log.info('прием сообщения')
+        serv_log.info(f'Сообщение: {data} было отправлено клиентом:  {addr}')
         msg = answer_message(data)
         send(msg, client)
+        serv_log.info(f'отправка сообщения: {msg}')
         client.close()
 
 

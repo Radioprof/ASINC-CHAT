@@ -2,6 +2,7 @@ from socket import *
 import json
 import sys
 
+from log.client_log_config import client_log
 from tools.common import receive, send
 from tools.client_actions import presence
 
@@ -16,14 +17,16 @@ def main():
         host = 'localhost'
         port = 7777
     except ValueError:
-        print('Номер порта может быть от 1024 до 65535.')
+        client_log.error('Номер порта может быть от 1024 до 65535.')
         sys.exit(1)
     s = socket(AF_INET, SOCK_STREAM)
     s.connect((host, port))
     data_presence = presence('Guest')
     send(data_presence, s)
+    client_log.info(f'отправка сообщения: {data_presence}')
     data = receive(s)
-    print('Сообщение от сервера: ', data)
+    client_log.info('прием сообщения')
+    client_log.info(f'Сообщение от сервера: {data}')
     s.close()
 
 
