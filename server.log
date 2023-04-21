@@ -1,0 +1,8 @@
+2023-04-20 22:26:14,923 INFO server прием сообщения
+2023-04-20 22:26:14,923 INFO server Сообщение: {'action': 'presence', 'time': 1682018774.923216, 'type': 'status', 'user': {'account_name': 'Admin', 'status': None}} было отправлено клиентом:  ('127.0.0.1', 14820)
+2023-04-20 22:26:14,923 ERROR server_actions соединение не установлено, код 400
+2023-04-20 22:26:14,923 INFO server отправка сообщения: {'response': 400, 'error': 'Bad Request'}
+2023-04-20 22:26:44,540 INFO server прием сообщения
+2023-04-20 22:26:44,540 INFO server Сообщение: {'action': 'presence', 'time': 1682018804.5408363, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}} было отправлено клиентом:  ('127.0.0.1', 14822)
+2023-04-20 22:26:44,540 INFO server_actions соединение установлено, код 200
+2023-04-20 22:26:44,540 INFO server отправка сообщения: {'response': 200}
