@@ -1,6 +1,6 @@
 import time
 
-from log.client_log_config import client_log
+# from log.client_log_config import client_log
 from log.decor import log_call2
 
 
@@ -14,7 +14,6 @@ def auth(name, password):
             "password": password
             }
         }
-    client_log.info('Сообщение Authenticate серверу')
     return data
 
 
@@ -29,5 +28,4 @@ def presence(name, status_mes=None):
             "status": status_mes
             }
         }
-    client_log.info('Сообщение Presence серверу')
     return data
