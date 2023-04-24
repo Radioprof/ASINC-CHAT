@@ -1,8 +1,0 @@
-2023-04-20 22:26:14,923 INFO client_actions Сообщение Presence серверу
-2023-04-20 22:26:14,923 INFO client отправка сообщения: {'action': 'presence', 'time': 1682018774.923216, 'type': 'status', 'user': {'account_name': 'Admin', 'status': None}}
-2023-04-20 22:26:14,923 INFO client прием сообщения
-2023-04-20 22:26:14,923 INFO client Сообщение от сервера: {'response': 400, 'error': 'Bad Request'}
-2023-04-20 22:26:44,540 INFO client_actions Сообщение Presence серверу
-2023-04-20 22:26:44,540 INFO client отправка сообщения: {'action': 'presence', 'time': 1682018804.5408363, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2023-04-20 22:26:44,540 INFO client прием сообщения
-2023-04-20 22:26:44,540 INFO client Сообщение от сервера: {'response': 200}

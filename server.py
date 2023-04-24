@@ -1,11 +1,12 @@
 from socket import *
 import sys
 
+from log.decor import log_call
 from log.server_log_config import serv_log
 from tools.common import receive, send
 from tools.server_actions import answer_message
 
-
+@log_call
 def main():
     s = socket(AF_INET, SOCK_STREAM)
     if '-p' in sys.argv:

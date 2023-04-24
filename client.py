@@ -1,12 +1,31 @@
 from socket import *
 import json
 import sys
+import time
+
 
 from log.client_log_config import client_log
+from log.decor import log_call2
 from tools.common import receive, send
-from tools.client_actions import presence
+# from tools.client_actions import presence
 
 
+@log_call2
+def presence(name, status_mes=None):
+    data = {
+        "action": "presence",
+        "time": time.time(),
+        "type": "status",
+        "user": {
+            "account_name": name,
+            "status": status_mes
+            }
+        }
+    client_log.info('Сообщение Presence серверу')
+    return data
+
+
+@log_call2
 def main():
     try:
         host = sys.argv[1]
