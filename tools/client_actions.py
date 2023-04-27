@@ -1,6 +1,6 @@
 import time
+from socket import socket, AF_INET, SOCK_STREAM
 
-# from log.client_log_config import client_log
 from log.decor import log_call2
 
 
@@ -29,3 +29,24 @@ def presence(name, status_mes=None):
             }
         }
     return data
+
+
+@log_call2
+def listen_server(address):
+    with socket(AF_INET, SOCK_STREAM) as sock:
+        sock.connect(address)
+        while True:
+            print('Прием')
+            data = sock.recv(1024).decode('utf-8')
+            print(data)
+
+
+@log_call2
+def write_server(address):
+    with socket(AF_INET, SOCK_STREAM) as sock:
+        sock.connect(address)
+        while True:
+            msg = input('Ваше сообщение: ')
+            if msg == 'exit':
+                break
+            sock.send(msg.encode('utf-8'))

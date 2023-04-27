@@ -3,8 +3,6 @@ from socket import socket, AF_INET, SOCK_STREAM
 
 
 def read_requests(r_clients, all_clients):
-    """ Чтение запросов из списка клиентов
-    """
     responses = {}
     for sock in r_clients:
         try:
@@ -17,23 +15,20 @@ def read_requests(r_clients, all_clients):
 
 
 def write_responses(requests, w_clients, all_clients):
-    """ Эхо-ответ сервера клиентам, от которых были запросы
-    """
     for sock in w_clients:
         if sock in requests:
             try:
                 resp = requests[sock].encode('utf-8')
-                for sock_a in all_clients:
-                    sock_a.send(resp.upper())
+                for _sock in w_clients:
+                    _sock.send(resp.upper())
             except:
                 print('Клиент {} {} отключился'.format(sock.fileno(), sock.getpeername()))
                 sock.close()
                 all_clients.remove(sock)
 
 
+
 def mainloop():
-    """ Основной цикл обработки запросов клиентов
-    """
     address = ('', 10000)
     clients = []
     s = socket(AF_INET, SOCK_STREAM)

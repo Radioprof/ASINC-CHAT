@@ -8,7 +8,7 @@ def log_call(func):
     @wraps(func)
     def wr_deco(*args, **kwargs):
         logging.basicConfig(level=logging.DEBUG,
-                            filename='call_function.log',
+                            filename='./logfile/call_function.log',
                             encoding='utf-8',
                             filemode='a',
                             format='%(asctime)s %(levelname)s - %(message)s')
@@ -25,7 +25,7 @@ def log_call2(func):
     @wraps(func)
     def wr_deco(*args, **kwargs):
         logging.basicConfig(level=logging.DEBUG,
-                            filename='call_function_client.log',
+                            filename='./logfile/call_function_client.log',
                             encoding='utf-8',
                             filemode='a',
                             format='%(asctime)s %(levelname)s %(message)s')
