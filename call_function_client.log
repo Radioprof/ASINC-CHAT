@@ -1,0 +1,4 @@
+2023-04-24 21:32:12,413 INFO main, __main__ () {}
+2023-04-24 21:32:12,418 INFO presence, tools.client_actions ('Guest',) {}
+2023-04-24 21:32:12,431 INFO send, tools.common Вызов из функции main(). Вызов из функции main ({'action': 'presence', 'time': 1682361132.4188037, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}, <socket.socket fd=412, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 5115), raddr=('127.0.0.1', 7777)>) {}
+2023-04-24 21:32:12,431 INFO receive, tools.common Вызов из функции main(). Вызов из функции main (<socket.socket fd=412, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 5115), raddr=('127.0.0.1', 7777)>,) {}
