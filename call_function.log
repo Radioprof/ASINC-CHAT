@@ -1,4 +1,0 @@
-2023-04-24 21:31:42,224 INFO - main, __main__ Вызов из функции main(). Вызов из функции <module> () {}
-2023-04-24 21:32:12,418 INFO - receive, tools.common Вызов из функции main(). Вызов из функции main (<socket.socket fd=452, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 5115)>,) {}
-2023-04-24 21:32:12,431 INFO - answer_message, tools.server_actions Вызов из функции main(). Вызов из функции main ({'action': 'presence', 'time': 1682361132.4188037, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}},) {}
-2023-04-24 21:32:12,439 INFO - send, tools.common Вызов из функции main(). Вызов из функции main ({'response': 200}, <socket.socket fd=452, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 5115)>) {}

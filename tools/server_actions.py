@@ -13,3 +13,16 @@ def answer_message(message):
         'response': 400,
         'error': 'Bad Request'
     }
+
+
+@log_call
+def chat_message(message):
+    if 'action' in message and message['action'] == 'chat' and 'time' in message \
+            and 'msg' in message and 'to_user' in message:
+        serv_log.info('соединение установлено, код 200')
+        return {'response': 200}
+    serv_log.error('соединение не установлено, код 400')
+    return {
+        'response': 400,
+        'error': 'Bad Request'
+    }

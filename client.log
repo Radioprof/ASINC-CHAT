@@ -1,3 +1,0 @@
-2023-04-24 21:32:12,431 INFO client отправка сообщения: {'action': 'presence', 'time': 1682361132.4188037, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2023-04-24 21:32:12,439 INFO client прием сообщения
-2023-04-24 21:32:12,439 INFO client Сообщение от сервера: {'response': 200}
