@@ -1,5 +1,5 @@
+import json
 import time
-# from socket import socket, AF_INET, SOCK_STREAM
 
 from log.decor import log_call2
 
@@ -50,7 +50,7 @@ def send_user(to_user, msg, account='Guest'):
     return data
 
 
-@log_call2
+# @log_call2
 def listen_server(sock, my_account):
     """
     Прием сообщений в чате
@@ -58,31 +58,27 @@ def listen_server(sock, my_account):
     :param my_account: имя пользователя
     :return:
     """
-    # with socket(AF_INET, SOCK_STREAM) as sock:
-    #     sock.connect(address)
-    #     while True:
-    data = sock.recv(1024).decode('utf-8')
-    if 'action' in data and data['action'] == 'chat' and 'time' in data \
-            and 'msg' in data and 'to_user' in data and data['to_user'] == my_account:
+    dec_data = sock.recv(1024).decode('utf-8')
+    data = json.loads(dec_data)
+    if 'action' in data and data['action'] == 'send' and 'message' in data and 'to_user' in data and data['to_user'] == my_account:
         print(f'Сообщение от {data["from"]}')
-        print(f'{data["msg"]}')
+        print(f'{data["message"]}')
 
 
-@log_call2
-def write_server(sock, my_name):
+# @log_call2
+def write_server(sock, my_account):
     """
     Отправка сообщения в чате на сервер
     :param sock:
-    :param my_name: аккаунт отправителя
+    :param my_account: аккаунт отправителя
     :return:
     """
-    # with socket(AF_INET, SOCK_STREAM) as sock:
-    #     sock.connect(address)
     while True:
         todo = input('Ваши действия (exit/send): ')
         to = input('Кому: ')
         msg = input('Ваше сообщение: ')
         if todo == 'exit':
             break
-        data = send_user(to, msg, my_name)
+        message = send_user(to, msg, my_account)
+        data = json.dumps(message, indent=4)
         sock.send(data.encode('utf-8'))
