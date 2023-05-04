@@ -3,6 +3,12 @@ from subprocess import Popen, CREATE_NEW_CONSOLE
 
 
 def start_clients(filenm, client_quant):
+    """
+
+    :param filenm: имя, запускаемого файла
+    :param client_quant: кол-во запускаемых приложений
+    :return:
+    """
     p_list = []
     while True:
         print(filenm, client_quant)
