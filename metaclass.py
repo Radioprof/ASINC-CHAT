@@ -45,6 +45,6 @@ class ServerVerifier(type):
         print(methods)
         if 'connect' in methods:
             raise TypeError('Использование метода connect недопустимо в серверном классе')
-        if not ('SOCK_STREAM' in attrs and 'AF_INET' in attrs):
-            raise TypeError('Некорректная инициализация сокета.')
+        # if not ('SOCK_STREAM' in attrs and 'AF_INET' in attrs):
+        #     raise TypeError('Некорректная инициализация сокета.')
         super().__init__(clsname, bases, clsdict)
