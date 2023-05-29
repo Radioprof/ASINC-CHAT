@@ -29,7 +29,7 @@ def chat_message(message):
     }
 
 
-def message_from_client(message, messages_list, client, clients, names):
+def message_from_client(message, messages_list, client, clients, names, database):
 
     if 'action' in message and message['action'] == 'presence' and \
             'time' in message and 'user' in message:
@@ -49,6 +49,28 @@ def message_from_client(message, messages_list, client, clients, names):
             and 'from' in message and 'message' in message:
         messages_list.append(message)
         return
+    elif 'action' in message and message['action'] == 'get_contact' and 'user' in message and \
+            names[message['user']] == client:
+        resp = {'response': 200}
+        resp['list_info'] = database.get_contacts(message['user'])
+        send(client, resp)
+
+    elif 'action' in message and message['action'] == 'add_contact' and 'account_name' in message and 'user' in message \
+            and names[message['user']] == client:
+        database.add_contact(message['user'], message['account_name'])
+        send(client, {'response': 200})
+
+    elif 'action' in message and message['action'] == 'remove_contact' and 'account_name' in message and 'user' in message \
+            and names[message['user']] == client:
+        database.remove_contact(message['user'], message['account_name'])
+        send(client, {'response': 200})
+
+    elif 'action' in message and message['action'] == 'user_reqwest' and 'account_name' in message \
+            and names[message['account_name']] == client:
+        resp = {'response': 200}
+        resp['list_info'] = [user[0] for user in database.users_list()]
+        send(client, resp)
+
     else:
         resp = {'response': 400}
         resp['error'] = 'Запрос некорректен.'

@@ -70,6 +70,41 @@ class ServerStorage:
 
         self.session.commit()
 
+    def process_message(self, sender, recipient):
+        sender = self.session.query(self.Clients).filter_by(name=sender).first().id
+        recipient = self.session.query(self.Clients).filter_by(name=recipient).first().id
+        # # Запрашиваем строки из истории и увеличиваем счётчики
+        # sender_row = self.session.query(self.ClientHistory).filter_by(user=sender).first()
+        # sender_row.sent += 1
+        # recipient_row = self.session.query(self.ClientHistory).filter_by(user=recipient).first()
+        # recipient_row.accepted += 1
+
+        self.session.commit()
+
+    def add_contact(self, user, contact):
+        user = self.session.query(self.Clients).filter_by(name=user).first()
+        contact = self.session.query(self.Clients).filter_by(name=contact).first()
+        if not contact or self.session.query(self.Contacts).filter_by(own_id=user.id, client_id=contact.id).count():
+            return
+        contact_row = self.Contacts(user.id, contact.id)
+        self.session.add(contact_row)
+        self.session.commit()
+
+    def del_contact(self, user, contact):
+        user = self.session.query(self.Clients).filter_by(name=user).first()
+        contact = self.session.query(self.Clients).filter_by(name=contact).first()
+        if not contact:
+            return
+        print(self.session.query(self.Contacts).filter(self.Contacts.own_id == user.id, self.Contacts.client_id == contact.id).delete())
+        self.session.commit()
+
+    def get_contacts(self, username):
+        user = self.session.query(self.Clients).filter_by(name=username).one()
+        query = self.session.query(self.Contacts, self.Clients.name).filter_by(own_id=user.id).join(self.Clients, self.Contacts.client_id == self.Clients.id)
+
+        # выбираем только имена пользователей и возвращаем их.
+        return [contact[1] for contact in query.all()]
+
 
 if __name__ == '__main__':
     test_db = ServerStorage()
