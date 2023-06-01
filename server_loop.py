@@ -1,4 +1,5 @@
 import configparser
+import os
 import sys
 
 import select
@@ -50,6 +51,7 @@ class Server(metaclass=ServerVerifier):
         self.msgs = []
         self.accnt = {}
         self.database = database
+        self.sock = ''
 
     def init_socket(self):
         s = socket(AF_INET, SOCK_STREAM)
