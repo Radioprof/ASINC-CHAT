@@ -1,13 +1,14 @@
-from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, ForeignKey, DateTime
+from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, ForeignKey, DateTime, Text
 from sqlalchemy.orm import sessionmaker, registry
 import datetime
 
 
 class ServerStorage:
     class Clients:
-        def __init__(self, username, info):
+        def __init__(self, username, pas_hash):
             self.name = username
-            self.info = info
+            self.pas_hash = pas_hash
+            self.pubkey = None
             self.id = None
 
     class ClientHistory:
@@ -33,7 +34,8 @@ class ServerStorage:
         clients_table = Table('Clients', self.metadata,
                               Column('id', Integer, primary_key=True),
                               Column('name', String, unique=True),
-                              Column('info', DateTime)
+                              Column('passwd_hash', String),
+                              Column('pubkey', Text)
                               )
         clients_history_table = Table('Client_history', self.metadata,
                                       Column('id', Integer, primary_key=True),
@@ -53,8 +55,17 @@ class ServerStorage:
         mapper_registry.map_imperatively(self.ClientHistory, clients_history_table)
         mapper_registry.map_imperatively(self.Contacts, contacts)
 
-        Session = sessionmaker(bind=self.database_engine)
-        self.session = Session()
+        session = sessionmaker(bind=self.database_engine)
+        self.session = session()
+
+    def add_client(self, name, passwd_hash):
+        user_row = self.Clients(name, passwd_hash)
+        self.session.add(user_row)
+        self.session.commit()
+        history_row = self.ClientHistory(user_row.id)
+        self.session.add(history_row)
+        self.session.commit()
+
 
     def client_login(self, username, ip_address, port, info):
         rez = self.session.query(self.Clients).filter_by(name=username)
@@ -104,6 +115,14 @@ class ServerStorage:
 
         # выбираем только имена пользователей и возвращаем их.
         return [contact[1] for contact in query.all()]
+
+    def get_hash(self, name):
+        user = self.session.query(self.Clients).filter_by(name=name).first()
+        return user.pas_hash
+
+    def get_pubkey(self, name):
+        user = self.session.query(self.Clients).filter_by(name=name).first()
+        return user.pubkey
 
 
 if __name__ == '__main__':

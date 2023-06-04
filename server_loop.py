@@ -1,6 +1,9 @@
+import binascii
 import configparser
+import hmac
 import os
 import sys
+import threading
 
 import select
 from socket import socket, AF_INET, SOCK_STREAM
@@ -11,9 +14,11 @@ from PyQt5.QtWidgets import QApplication, QMessageBox
 from gui.server import MainWindow, gui_create_model, HistoryWindow, create_stat_model, ConfigWindow
 from metaclass import ServerVerifier
 from srv_descript import PortCheck
-from tools.common import receive
+from tools.common import receive, send
 from tools.server_actions import message_from_client, proc_message
 from server_db import ServerStorage
+
+conflag_lock = threading.Lock()
 
 
 def read_requests(r_clients, all_clients):
@@ -61,6 +66,60 @@ class Server(metaclass=ServerVerifier):
 
         self.sock.listen()
 
+    def autorize_user(self, message, sock):
+        if message['user']['account_name'] in self.names.keys():
+            response = {'response': 400, 'error': None}
+            response['error'] = 'Имя пользователя уже занято.'
+            try:
+                send(sock, response)
+            except OSError:
+                pass
+            self.clients.remove(sock)
+            sock.close()
+        elif not self.database.check_user(message['user']['account_name']):
+            response = {'response': 400, 'error': None}
+            response['error'] = 'Пользователь не зарегистрирован.'
+            try:
+                send(sock, response)
+            except OSError:
+                pass
+            self.clients.remove(sock)
+            sock.close()
+        else:
+            message_auth = {'response': 511, 'data': None}
+            random_str = binascii.hexlify(os.urandom(64))
+            message_auth['data'] = random_str.decode('ascii')
+            hash_ms = hmac.new(self.database.get_hash(message['user']['account_name']), random_str, 'MD5')
+            digest = hash_ms.digest()
+            try:
+                send(sock, message_auth)
+                ans = receive(sock)
+            except OSError:
+                sock.close()
+                return
+            client_digest = binascii.a2b_base64(ans['data'])
+            if 'response' in ans and ans['response'] == 511 and hmac.compare_digest(digest, client_digest):
+                self.names[message['user']['account_name']] = sock
+                client_ip, client_port = sock.getpeername()
+                try:
+                    send(sock, {'response': 200})
+                except OSError:
+                    self.remove_client(message['user']['account_name'])
+                self.database.user_login(
+                    message['user']['account_name'],
+                    client_ip,
+                    client_port,
+                    message['user']['public_key'])
+            else:
+                response = {'response': 400, 'error': None}
+                response['error'] = 'Неверный пароль.'
+                try:
+                    send(sock, response)
+                except OSError:
+                    pass
+                self.clients.remove(sock)
+                sock.close()
+
     def main_loop(self):
         self.init_socket()
         while True:
@@ -103,7 +162,7 @@ def main():
     config = configparser.ConfigParser()
     dir_path = os.path.dirname(os.path.realpath(__file__))
     config.read(f"{dir_path}/{'server.ini'}")
-    server = Server('', 10000, db)
+    server = Server('', 7777, db)
     server.main_loop()
     server_app = QApplication(sys.argv)
     main_window = MainWindow()
@@ -116,7 +175,7 @@ def main():
     def list_update():
         global new_connection
         if new_connection:
-            main_window.active_clients_table.setModel(gui_create_model(database))
+            main_window.active_clients_table.setModel(gui_create_model(db))
             main_window.active_clients_table.resizeColumnsToContents()
             main_window.active_clients_table.resizeRowsToContents()
             with conflag_lock:
